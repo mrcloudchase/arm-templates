@@ -1,0 +1,154 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "company": {
+            "type": "string",
+            "defaultValue": "[variables('company')]",
+            "metadata": {
+                "description": "Name of customer/company to be used for naming convention in resources"
+            }
+        },
+        "mainFunction": {
+            "type": "string",
+            "defaultValue": "[variables('function')]",
+            "metadata": {
+                "description": "Main function of resource to be used for naming convention in resources"
+            }
+        },
+        "subFunction": {
+            "type": "string",
+            "defaultValue": "[variables('subFuncVar')]",
+            "metadata": {
+                "description": "Subfunction of resource to be used for naming convention in resources"
+            }
+        },
+        "environmentType": {
+            "type": "string",
+            "allowedValues": [
+                "Production",
+                "Development"
+            ],
+            "metadata": {
+                "description": "description"
+            }
+        },
+        "resourceCount": {
+            "type": "int",
+            "defaultValue": 5,
+            "metadata": {
+                "description": "Resource count used for iteration when creating multiple resources with a different index"
+            }
+        }
+    },
+    "variables": {
+        "envLetter": "[toLower(first(parameters('environmentType')))]",
+        "company": "ssg",
+        "function": "ui",
+        "subFuncVar": "bot",
+        "locationAbbrevation": "scus",
+        "vnetCIDR": "10.11.80.0/24",
+        "subnet1CIDR": "10.11.80.0/26",
+        "subnet2CIDR": "10.11.80.64/28",
+        "vnetName": "[concat(variables('resourceNameConvention'), 'vnet', variables('locationAbbrevation'))]",
+        "subnet1Name": "subnet1",
+        "subnet2Name": "subnet2",
+        "nsg1Name": "[concat(variables('resourceNameConvention'), 'nsg1')]",
+        "nsg2Name": "[concat(variables('resourceNameConvention'), 'nsg2')]",
+        "resourceNameConvention": "[concat(parameters('company'), parameters('mainFunction'), parameters('subFunction'),variables('envLetter'))]"
+    },
+    "resources": [
+        {
+            "name": "[variables('nsg1Name')]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2018-08-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "nsgRule1",
+                        "properties": {
+                            "description": "description",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "[variables('nsg2Name')]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2018-08-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "nsgRule1",
+                        "properties": {
+                            "description": "description",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "[variables('vnetName')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2018-08-01",
+            "location": "[resourceGroup().location]",
+            "tags": {},
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[variables('vnetCIDR')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[variables('subnet1Name')]",
+                        "properties": {
+                            "addressPrefix": "[variables('subnet1CIDR')]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg1Name'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "[variables('subnet2Name')]",
+                        "properties": {
+                            "addressPrefix": "[variables('subnet2CIDR')]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg2Name'))]"
+                            }
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg1Name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg2Name'))]"
+            ]
+        }
+    ],
+    "outputs": {
+        "vnetName": {
+            "type": "string",
+            "value": "[concat(variables('resourceNameConvention'), 'vnet', variables('locationAbbrevation'))]"
+        }
+    }
+}
