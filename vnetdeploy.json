@@ -66,16 +66,58 @@
             "properties": {
                 "securityRules": [
                     {
-                        "name": "nsgRule1",
+                        "name": "allowPort80",
                         "properties": {
-                            "description": "description",
+                            "description": "Allowed traffic for UI application",
                             "protocol": "Tcp",
                             "sourcePortRange": "*",
-                            "destinationPortRange": "*",
-                            "sourceAddressPrefix": "*",
+                            "destinationPortRange": "80",
+                            "sourceAddressPrefix": "[variables('vnetCIDR')]",
                             "destinationAddressPrefix": "*",
                             "access": "Allow",
                             "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "allowPort443",
+                        "properties": {
+                            "description": "Allowed traffic for UI application",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "443",
+                            "sourceAddressPrefix": "[variables('vnetCIDR')]",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 110,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "allowPort8051",
+                        "properties": {
+                            "description": "Allowed traffic for UI application",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "8051",
+                            "sourceAddressPrefix": "[variables('vnetCIDR')]",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 120,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "allowPort8501",
+                        "properties": {
+                            "description": "Allowed traffic for UI application",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "8501",
+                            "sourceAddressPrefix": "[variables('vnetCIDR')]",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 130,
                             "direction": "Inbound"
                         }
                     }
@@ -90,16 +132,58 @@
             "properties": {
                 "securityRules": [
                     {
-                        "name": "nsgRule1",
+                        "name": "allowPort80",
                         "properties": {
-                            "description": "description",
+                            "description": "Allowed traffic for UI application",
                             "protocol": "Tcp",
                             "sourcePortRange": "*",
-                            "destinationPortRange": "*",
-                            "sourceAddressPrefix": "*",
+                            "destinationPortRange": "80",
+                            "sourceAddressPrefix": "[variables('vnetCIDR')]",
                             "destinationAddressPrefix": "*",
                             "access": "Allow",
                             "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "allowPort443",
+                        "properties": {
+                            "description": "Allowed traffic for UI application",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "443",
+                            "sourceAddressPrefix": "[variables('vnetCIDR')]",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 110,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "allowPort8051",
+                        "properties": {
+                            "description": "Allowed traffic for UI application",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "8051",
+                            "sourceAddressPrefix": "[variables('vnetCIDR')]",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 120,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "allowPort8501",
+                        "properties": {
+                            "description": "Allowed traffic for UI application",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "8501",
+                            "sourceAddressPrefix": "[variables('vnetCIDR')]",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 130,
                             "direction": "Inbound"
                         }
                     }
